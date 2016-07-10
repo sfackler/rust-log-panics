@@ -1,0 +1,14 @@
+[package]
+name = "log-panics"
+version = "0.1.0"
+authors = ["Steven Fackler <sfackler@gmail.com>"]
+
+[features]
+with-backtrace = ["backtrace"]
+
+[dependencies]
+log = "0.3"
+backtrace = { version = "0.2", optional = true }
+
+[dev-dependencies]
+env_logger = "0.3"
