@@ -9,7 +9,7 @@ use std::panic::{self, PanicInfo};
 use std::thread;
 
 pub fn init() {
-    std::panic::set_hook(Box::new(hook));
+    panic::set_hook(Box::new(hook));
 }
 
 fn hook(info: &PanicInfo) {
@@ -82,7 +82,7 @@ impl fmt::Display for Backtrace {
 
 #[cfg(not(feature = "with-backtrace"))]
 impl fmt::Display for Backtrace {
-    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, _: &mut fmt::Formatter) -> fmt::Result {
         Ok(())
     }
 }
