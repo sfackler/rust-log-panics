@@ -78,7 +78,11 @@ mod backtrace {
                     }
 
                     if let (Some(file), Some(line)) = (symbol.filename(), symbol.lineno()) {
-                        let _  = write!(fmt, "\n      {:3$}at {}:{}", "", file.display(), line, HEX_WIDTH);
+                        let _  = write!(fmt,
+                                        "\n      {:3$}at {}:{}", "",
+                                        file.display(),
+                                        line,
+                                        HEX_WIDTH);
                     }
                 }
             }
