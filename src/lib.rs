@@ -64,7 +64,7 @@ mod backtrace {
 
             for (idx, frame) in self.0.frames().iter().enumerate() {
                 let ip = frame.ip();
-                let _ = write!(fmt, "\n  {:2}: {:2$?}", idx, ip, HEX_WIDTH);
+                let _ = write!(fmt, "\n{:4}: {:2$?}", idx, ip, HEX_WIDTH);
 
                 for (idx, symbol) in frame.symbols().iter().enumerate() {
                     if idx != 0 {
