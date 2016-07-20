@@ -3,6 +3,7 @@
 //! The format used is identical to the standard library's. If the
 //! `with-backtrace` Cargo feature is enabled, a backtrace will be printed along
 //! with the panic message.
+#![doc(html_root_url="https://sfackler.github.io/rust-log-panics/doc/v1.0.0")]
 #![warn(missing_docs)]
 
 #[macro_use]
