@@ -5,3 +5,4 @@ rust:
 - 1.10.0
 script:
 - cargo test
+- cargo test --features with-backtrace
