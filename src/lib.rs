@@ -4,6 +4,7 @@ extern crate log;
 #[cfg(feature = "with-backtrace")]
 extern crate backtrace;
 
+use std::fmt;
 use std::panic;
 use std::thread;
 
@@ -11,20 +12,26 @@ use backtrace::Backtrace;
 
 #[cfg(not(feature = "with-backtrace"))]
 mod backtrace {
-    use std::fmt;
-
     pub struct Backtrace;
-
-    impl fmt::Debug for Backtrace {
-        fn fmt(&self, _: &mut fmt::Formatter) -> fmt::Result {
-            Ok(())
-        }
-    }
 
     impl Backtrace {
         pub fn new() -> Backtrace {
             Backtrace
         }
+    }
+}
+
+struct Shim(Backtrace);
+
+impl fmt::Debug for Shim {
+    #[cfg(feature = "with-backtrace")]
+    fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
+        write!(fmt, "\n{:?}", self.0)
+    }
+
+    #[cfg(not(feature = "with-backtrace"))]
+    fn fmt(&self, _: &mut fmt::Formatter) -> fmt::Result {
+        Ok(())
     }
 }
 
@@ -50,9 +57,9 @@ pub fn init() {
                        msg,
                        location.file(),
                        location.line(),
-                       backtrace);
+                       Shim(backtrace));
             }
-            None => error!("thread '{}' panicked at '{}'{:?}", thread, msg, backtrace),
+            None => error!("thread '{}' panicked at '{}'{:?}", thread, msg, Shim(backtrace)),
         }
     }));
 }
