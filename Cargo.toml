@@ -1,0 +1,19 @@
+[package]
+name = "log-panics"
+version = "1.0.0"
+authors = ["Steven Fackler <sfackler@gmail.com>"]
+license = "MIT/Apache-2.0"
+description = "A panic hook which logs panic messages rather than printing them"
+repository = "https://github.com/sfackler/rust-log-panics"
+documentation = "https://sfackler.github.io/rust-log-panics/doc/v1.0.0/log_panics"
+readme = "README.md"
+
+[features]
+with-backtrace = ["backtrace"]
+
+[dependencies]
+log = "0.3"
+backtrace = { version = "0.2", optional = true }
+
+[dev-dependencies]
+env_logger = "0.3"
