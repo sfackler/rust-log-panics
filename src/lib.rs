@@ -1,3 +1,10 @@
+//! A crate which logs panics instead of writing to standard error.
+//!
+//! The format used is identical to the standard library's. If the
+//! `with-backtrace` Cargo feature is enabled, a backtrace will be printed along
+//! with the panic message.
+#![warn(missing_docs)]
+
 #[macro_use]
 extern crate log;
 
@@ -35,6 +42,10 @@ impl fmt::Debug for Shim {
     }
 }
 
+/// Initializes the panic hook.
+///
+/// After this method is called, all panics will be logged rather than printed
+/// to standard error.
 pub fn init() {
     panic::set_hook(Box::new(|info| {
         let backtrace = Backtrace::new();
