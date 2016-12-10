@@ -13,7 +13,7 @@ with-backtrace = ["backtrace"]
 
 [dependencies]
 log = "0.3"
-backtrace = { version = "0.2", optional = true }
+backtrace = { version = "0.3", optional = true }
 
 [dev-dependencies]
 env_logger = "0.3"
