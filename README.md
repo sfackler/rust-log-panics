@@ -1,8 +1,8 @@
 # rust-log-panics
 
-[![Build Status](https://travis-ci.org/sfackler/rust-log-panics.svg?branch=master)](https://travis-ci.org/sfackler/rust-log-panics)
+[![CircleCI](https://circleci.com/gh/sfackler/rust-log-panics.svg?style=shield)](https://circleci.com/gh/sfackler/rust-log-panics)
 
-[Documentation](https://docs.rs/log-panics/1.1.0/log_panics)
+[Documentation](https://docs.rs/log-panics)
 
 A panic hook which logs panics rather than printing them.
 
