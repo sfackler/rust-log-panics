@@ -1,0 +1,39 @@
+restore_registry: &RESTORE_REGISTRY
+  restore_cache:
+    key: registry
+
+save_registry: &SAVE_REGISTRY
+  save_cache:
+    key: registry-{{ .BuildNum }}
+    paths:
+      - ~/.cargo/registry/index
+
+deps_key: &DEPS_KEY
+  key: dependencies-1.18-{{ checksum "Cargo.lock" }}
+
+restore_deps: &RESTORE_DEPS
+  restore_cache:
+    <<: *DEPS_KEY
+
+save_deps: &SAVE_DEPS
+  save_cache:
+    <<: *DEPS_KEY
+    paths:
+      - target
+      - ~/.cargo/regisstry/cache
+
+version: 2
+jobs:
+  build:
+    working_directory: ~/build
+    docker:
+      - image: jimmycuadra/rust:1.18.0
+    steps:
+      - checkout
+      - <<: *RESTORE_REGISTRY
+      - run: cargo generate-lockfile
+      - <<: *SAVE_REGISTRY
+      - <<: *RESTORE_DEPS
+      - run: cargo test
+      - run: cargo test --features with-backtrace
+      - <<: *SAVE_DEPS
