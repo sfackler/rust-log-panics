@@ -64,14 +64,14 @@ pub fn init() {
 
         match info.location() {
             Some(location) => {
-                error!("thread '{}' panicked at '{}': {}:{}{:?}",
+                error!(target: "panic", "thread '{}' panicked at '{}': {}:{}{:?}",
                        thread,
                        msg,
                        location.file(),
                        location.line(),
                        Shim(backtrace));
             }
-            None => error!("thread '{}' panicked at '{}'{:?}", thread, msg, Shim(backtrace)),
+            None => error!(target: "panic", "thread '{}' panicked at '{}'{:?}", thread, msg, Shim(backtrace)),
         }
     }));
 }
