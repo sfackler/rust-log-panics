@@ -3,7 +3,7 @@
 //! The format used is identical to the standard library's. If the
 //! `with-backtrace` Cargo feature is enabled, a backtrace will be printed along
 //! with the panic message.
-#![doc(html_root_url = "https://docs.rs/log-panics/1.2.0")]
+#![doc(html_root_url = "https://docs.rs/log-panics/2.0.0")]
 #![warn(missing_docs)]
 
 #[macro_use]
