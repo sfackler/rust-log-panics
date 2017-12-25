@@ -12,7 +12,7 @@ readme = "README.md"
 with-backtrace = ["backtrace"]
 
 [dependencies]
-log = "0.3"
+log = "0.4"
 backtrace = { version = "0.3", optional = true }
 
 [dev-dependencies]

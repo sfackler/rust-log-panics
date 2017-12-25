@@ -3,7 +3,7 @@
 //! The format used is identical to the standard library's. If the
 //! `with-backtrace` Cargo feature is enabled, a backtrace will be printed along
 //! with the panic message.
-#![doc(html_root_url="https://docs.rs/log-panics/1.2.0")]
+#![doc(html_root_url = "https://docs.rs/log-panics/1.2.0")]
 #![warn(missing_docs)]
 
 #[macro_use]
@@ -59,19 +59,29 @@ pub fn init() {
             None => match info.payload().downcast_ref::<String>() {
                 Some(s) => &**s,
                 None => "Box<Any>",
-            }
+            },
         };
 
         match info.location() {
             Some(location) => {
-                error!(target: "panic", "thread '{}' panicked at '{}': {}:{}{:?}",
-                       thread,
-                       msg,
-                       location.file(),
-                       location.line(),
-                       Shim(backtrace));
+                error!(
+                    target: "panic", "thread '{}' panicked at '{}': {}:{}{:?}",
+                    thread,
+                    msg,
+                    location.file(),
+                    location.line(),
+                    Shim(backtrace)
+                );
             }
-            None => error!(target: "panic", "thread '{}' panicked at '{}'{:?}", thread, msg, Shim(backtrace)),
+            None => {
+                error!(
+                    target: "panic",
+                    "thread '{}' panicked at '{}'{:?}",
+                    thread,
+                    msg,
+                    Shim(backtrace)
+                )
+            }
         }
     }));
 }
