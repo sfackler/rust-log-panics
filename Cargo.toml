@@ -15,4 +15,4 @@ log = "0.4"
 backtrace = { version = "0.3", optional = true }
 
 [dev-dependencies]
-env_logger = "0.3"
+env_logger = "0.5"
