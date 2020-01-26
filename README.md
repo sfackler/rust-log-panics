@@ -6,6 +6,14 @@
 
 A panic hook which logs panics rather than printing them.
 
+## Logging with a backtrace
+
+Because logging with a backtrace requires additional dependencies, the `with-backtrace` feature must be enabled in order to use it. You can add the following in your `Cargo.toml`:
+
+```
+log-panics = { version = "2", features = ["with-backtrace"]}
+```
+
 ## License
 
 Licensed under either of
