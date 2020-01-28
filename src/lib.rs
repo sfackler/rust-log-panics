@@ -1,8 +1,14 @@
 //! A crate which logs panics instead of writing to standard error.
 //!
-//! The format used is identical to the standard library's. If the
-//! `with-backtrace` Cargo feature is enabled, a backtrace will be printed along
-//! with the panic message.
+//! The format used is identical to the standard library's.
+//!
+//! Because logging with a backtrace requires additional dependencies,
+//! the `with-backtrace` feature must be enabled. You can add the
+//! following in your `Cargo.toml`:
+//!
+//! ```toml
+//! log-panics = { version = "2", features = ["with-backtrace"]}
+//! ```
 #![doc(html_root_url = "https://docs.rs/log-panics/2.0.0")]
 #![warn(missing_docs)]
 
