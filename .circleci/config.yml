@@ -9,7 +9,7 @@ save_registry: &SAVE_REGISTRY
       - ~/.cargo/registry/index
 
 deps_key: &DEPS_KEY
-  key: dependencies-1.18-{{ checksum "Cargo.lock" }}
+  key: dependencies-1.45-{{ checksum "Cargo.lock" }}
 
 restore_deps: &RESTORE_DEPS
   restore_cache:
@@ -20,14 +20,14 @@ save_deps: &SAVE_DEPS
     <<: *DEPS_KEY
     paths:
       - target
-      - ~/.cargo/regisstry/cache
+      - ~/.cargo/registry/cache
 
 version: 2
 jobs:
   build:
     working_directory: ~/build
     docker:
-      - image: jimmycuadra/rust:1.18.0
+      - image: rust:1.45.0
     steps:
       - checkout
       - <<: *RESTORE_REGISTRY
