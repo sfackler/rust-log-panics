@@ -18,21 +18,14 @@ extern crate log;
 #[cfg(feature = "with-backtrace")]
 extern crate backtrace;
 
-use std::fmt;
-use std::panic;
-use std::thread;
+use std::{fmt, panic, thread};
 
 use backtrace::Backtrace;
 
 #[cfg(not(feature = "with-backtrace"))]
 mod backtrace {
+    #[derive(Default)]
     pub struct Backtrace;
-
-    impl Backtrace {
-        pub fn new() -> Backtrace {
-            Backtrace
-        }
-    }
 }
 
 struct Shim(Backtrace);
@@ -43,6 +36,7 @@ impl fmt::Debug for Shim {
         write!(fmt, "\n{:?}", self.0)
     }
 
+    #[inline]
     #[cfg(not(feature = "with-backtrace"))]
     fn fmt(&self, _: &mut fmt::Formatter) -> fmt::Result {
         Ok(())
@@ -55,10 +49,10 @@ impl fmt::Debug for Shim {
 /// to standard error.
 pub fn init() {
     panic::set_hook(Box::new(|info| {
-        let backtrace = Backtrace::new();
+        let backtrace = Backtrace::default();
 
         let thread = thread::current();
-        let thread = thread.name().unwrap_or("unnamed");
+        let thread = thread.name().unwrap_or("<unnamed>");
 
         let msg = match info.payload().downcast_ref::<&'static str>() {
             Some(s) => *s,
@@ -79,15 +73,13 @@ pub fn init() {
                     Shim(backtrace)
                 );
             }
-            None => {
-                error!(
-                    target: "panic",
-                    "thread '{}' panicked at '{}'{:?}",
-                    thread,
-                    msg,
-                    Shim(backtrace)
-                )
-            }
+            None => error!(
+                target: "panic",
+                "thread '{}' panicked at '{}'{:?}",
+                thread,
+                msg,
+                Shim(backtrace)
+            ),
         }
     }));
 }

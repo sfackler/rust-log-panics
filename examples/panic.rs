@@ -1,5 +1,5 @@
-extern crate log_panics;
 extern crate env_logger;
+extern crate log_panics;
 
 fn main() {
     env_logger::init();
