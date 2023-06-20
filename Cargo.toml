@@ -9,7 +9,7 @@ readme = "README.md"
 
 [features]
 with-backtrace = ["backtrace"]
-with-tracing = ["tracing]
+with-tracing = ["tracing"]
 with-log = ["log"]
 default = ["with-log"]
 
