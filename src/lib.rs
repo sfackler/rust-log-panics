@@ -20,6 +20,13 @@
 // Enable feature requirements on docs.rs.
 #![cfg_attr(docsrs, feature(doc_cfg, doc_auto_cfg))]
 
+#[cfg(all(feature = "with-tracing", feature = "with-log"))]
+compile_error!("features `with-tracing` and `with-log` are mutually exclusive");
+
+#[cfg(feature = "with-tracing")]
+#[macro_use]
+extern crate tracing;
+#[cfg(feature = "with-log")]
 #[macro_use]
 extern crate log;
 

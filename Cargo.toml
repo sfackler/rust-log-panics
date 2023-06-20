@@ -9,9 +9,13 @@ readme = "README.md"
 
 [features]
 with-backtrace = ["backtrace"]
+with-tracing = ["tracing]
+with-log = ["log"]
+default = ["with-log"]
 
 [dependencies]
-log = "0.4"
+log = { version = "0.4", optional = true }
+tracing = { version = "0.1", optional = true }
 backtrace = { version = "0.3", optional = true }
 
 [dev-dependencies]
