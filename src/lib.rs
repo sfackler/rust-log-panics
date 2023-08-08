@@ -16,7 +16,6 @@
 
 #![doc(html_root_url = "https://docs.rs/log-panics/2.0.0")]
 #![warn(missing_docs)]
-
 // Enable feature requirements on docs.rs.
 #![cfg_attr(docsrs, feature(doc_cfg, doc_auto_cfg))]
 
@@ -64,7 +63,7 @@ pub enum BacktraceMode {
     /// Backtraces will include addresses, but no symbol names or locations.
     Unresolved,
     /// Backtraces will include addresses as well as symbol names and locations when possible.
-    Resolved
+    Resolved,
 }
 
 /// Configures the panic hook, ending with initialization.
@@ -135,14 +134,18 @@ impl Config {
                         location.line(),
                         Shim(backtrace)
                     );
+                    print!("{:?}", info);
                 }
-                None => error!(
-                    target: "panic",
-                    "thread '{}' panicked at '{}'{:?}",
-                    thread,
-                    msg,
-                    Shim(backtrace)
-                ),
+                None => {
+                    error!(
+                        target: "panic",
+                        "thread '{}' panicked at '{}'{:?}",
+                        thread,
+                        msg,
+                        Shim(backtrace)
+                    );
+                    print!("{:?}", info);
+                }
             }
         }));
     }
