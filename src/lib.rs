@@ -77,12 +77,22 @@ pub enum BacktraceMode {
 ///     .backtrace_mode(log_panics::BacktraceMode::Unresolved)
 ///     .install_panic_hook()
 /// ```
-#[derive(Debug)]
 pub struct Config {
     // We store a constructor function instead of a BacktraceMode enum
     // so that inlining can eliminate references to `Backtrace::default`
     // if symbolication is not desired.
     make_backtrace: fn() -> Backtrace,
+    // Logger gets flushed.
+    logger: Option<&'static dyn log::Log>
+}
+
+impl fmt::Debug for Config {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let logger = if self.logger.is_some() { "Some(?)" } else { "None"};
+        f.debug_struct("Config")
+            .field("make_backtrace", &self.make_backtrace)
+            .field("logger", &logger).finish()
+    }
 }
 
 impl Config {
@@ -90,6 +100,7 @@ impl Config {
     pub fn new() -> Self {
         Self {
             make_backtrace: Backtrace::default,
+            logger: None
         }
     }
 
@@ -144,6 +155,10 @@ impl Config {
                     Shim(backtrace)
                 ),
             }
+
+            if let Some(logger) = self.logger {
+                logger.flush();
+            }
         }));
     }
 }
@@ -162,4 +177,16 @@ impl Default for Config {
 /// See [`Config`] for more information.
 pub fn init() {
     Config::new().install_panic_hook()
+}
+
+/// Initializes the panic hook with a log, which will be flushed during a panic.
+///
+/// After this method is called, all panics will be logged rather than printed
+/// to standard error.
+///
+/// See [`Config`] for more information.
+pub fn init_with_log(logger: &'static dyn log::Log) {
+    let mut config = Config::new();
+    config.logger.replace(logger);
+    config.install_panic_hook()
 }
