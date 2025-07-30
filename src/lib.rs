@@ -16,7 +16,6 @@
 
 #![doc(html_root_url = "https://docs.rs/log-panics/2.0.0")]
 #![warn(missing_docs)]
-
 // Enable feature requirements on docs.rs.
 #![cfg_attr(docsrs, feature(doc_cfg, doc_auto_cfg))]
 
@@ -64,7 +63,7 @@ pub enum BacktraceMode {
     /// Backtraces will include addresses, but no symbol names or locations.
     Unresolved,
     /// Backtraces will include addresses as well as symbol names and locations when possible.
-    Resolved
+    Resolved,
 }
 
 /// Configures the panic hook, ending with initialization.
@@ -83,6 +82,8 @@ pub struct Config {
     // so that inlining can eliminate references to `Backtrace::default`
     // if symbolication is not desired.
     make_backtrace: fn() -> Backtrace,
+    // The internal logging target.
+    target: String,
 }
 
 impl Config {
@@ -90,7 +91,14 @@ impl Config {
     pub fn new() -> Self {
         Self {
             make_backtrace: Backtrace::default,
+            target: "panic".to_string(),
         }
+    }
+
+    /// Overwrites the internal logging target. The default is "panic".
+    pub fn with_target(mut self, target: &str) -> Self {
+        self.target = target.to_string();
+        self
     }
 
     /// Controls how backtraces are displayed.
@@ -128,7 +136,7 @@ impl Config {
             match info.location() {
                 Some(location) => {
                     error!(
-                        target: "panic", "thread '{}' panicked at '{}': {}:{}{:?}",
+                        target: &self.target, "thread '{}' panicked at '{}': {}:{}{:?}",
                         thread,
                         msg,
                         location.file(),
@@ -137,7 +145,7 @@ impl Config {
                     );
                 }
                 None => error!(
-                    target: "panic",
+                    target: &self.target,
                     "thread '{}' panicked at '{}'{:?}",
                     thread,
                     msg,
