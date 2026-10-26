@@ -41,10 +41,14 @@ struct Shim(Backtrace);
 impl fmt::Debug for Shim {
     #[cfg(feature = "with-backtrace")]
     fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
-        if !self.0.frames().is_empty() {
-            write!(fmt, "\n{:?}", self.0)
-        } else {
+        let frames = self.0.frames();
+        if frames.is_empty() {
             Ok(())
+        } else if frames.iter().all(|f| f.symbols().is_empty()) {
+            // Unresolved backtraces only print addresses in the alternate format.
+            write!(fmt, "\n{:#?}", self.0)
+        } else {
+            write!(fmt, "\n{:?}", self.0)
         }
     }
 
